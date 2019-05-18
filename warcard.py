@@ -8,35 +8,34 @@ PlayerB = object()
 
 def generate_deck():
     deck = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'] * 4
-
-    deck = [x % 13 + 1 for x in range(52)]
     shuffle(deck)
 
     return deck
 
 
-def compare(playera, playerb, stash):
+def compare(player_a, player_b, stash):
 
-    values = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '1': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14}
+    values = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14}
 
     card_a = stash[-1]
     card_b = stash[-2]
 
-    if card_a > card_b:
+    if values[card_a] > values[card_b]:
         return PlayerA
-    elif card_a < card_b:
+    elif values[card_a] < values[card_b]:
         return PlayerB
     else:
+        # Tie !
         try:
-            stash.append(playera.pop())
-            stash.append(playerb.pop())
-            stash.append(playera.pop())
-            stash.append(playerb.pop())
+            stash.append(player_a.pop())
+            stash.append(player_b.pop())
+            stash.append(player_a.pop())
+            stash.append(player_b.pop())
 
-            return compare(playera, playerb, stash)
+            return compare(player_a, player_b, stash)
 
         except IndexError:
-            if playera:
+            if player_a:
                 return PlayerA
             else:
                 return PlayerB
@@ -44,29 +43,30 @@ def compare(playera, playerb, stash):
 
 def deal(deck):
 
-    playerA = []
-    playerB = []
+    player_a = []
+    player_b = []
 
     while deck:
-        playerA.append(deck.pop())
-        playerB.append(deck.pop())
+        player_a.append(deck.pop())
+        player_b.append(deck.pop())
 
-    return playerA, playerB
+    return player_a, player_b
 
 
 def run():
 
     deck = generate_deck()
-    playerA, playerB = deal(deck)
+    player_a, player_b = deal(deck)
 
     rounds = 0
-    while playerA and playerB:
+    while player_a and player_b:
 
-        stash = [playerA.pop(),  playerB.pop()]
-        if compare(playerA, playerB, stash) == PlayerA:
-            playerA.extend(stash)
+        stash = [player_a.pop(),  player_b.pop()]
+
+        if compare(player_a, player_b, stash) == PlayerA:
+            player_a.extend(stash)
         else:
-            playerB.extend(stash)
+            player_b.extend(stash)
 
         rounds += 1
 
