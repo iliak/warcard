@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from random import shuffle
+from random import shuffle, random
 from collections import deque
 
 PlayerA = object()
@@ -9,6 +9,8 @@ PlayerB = object()
 
 def generate_deck():
     deck = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'] * 4
+    shuffle(deck)
+    shuffle(deck)
     shuffle(deck)
 
     return deck
